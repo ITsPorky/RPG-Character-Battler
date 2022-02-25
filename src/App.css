@@ -1,0 +1,70 @@
+.App {
+  text-align: center;
+}
+
+.battle-bg {
+  background: url("/public/images/bg_all.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (min-width: 768px) {
+  .App {
+    text-align: left;
+  }
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes Character-bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes Character-bounce-left {
+  0% {
+    transform: translateY(0) scaleX(-1);
+  }
+  50% {
+    transform: translateY(-10px) scaleX(-1);
+  }
+  100% {
+    transform: translateY(0) scaleX(-1);
+  }
+}
+
+.styled-input {
+  font-family: "Press Start 2P", cursive;
+  border: 2px solid #fff;
+  background-color: #222;
+  color: #fff;
+  padding: 0.5em;
+}
+
+.styled-input.inverse {
+  font-family: "Press Start 2P", cursive;
+  border: 2px solid #fff;
+  background-color: #fff;
+  color: #222;
+  padding: 0.5em;
+}
