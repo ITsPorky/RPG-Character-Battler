@@ -5,7 +5,6 @@ import {
   doHealRound,
   doSpecialRound,
   doFleeRound,
-  startBattle,
   rollInitiative2,
   initiateBattle,
 } from "../utils/utils";
@@ -22,6 +21,7 @@ class Battle extends Component {
     enemySeed: "",
     enemy: "",
     enemyIsLoaded: false,
+    enemyTurn: false,
     log: [],
     logIsLoaded: false,
     initiativeOrder: [],
@@ -30,7 +30,7 @@ class Battle extends Component {
 
   handleCallbackCharacter = (data) => {
     this.setState({ playerSeed: data });
-    fetch(`http://localhost:3030/seed/${data}/metadata`)
+    fetch(`http://localhost:3030/special/${data}/metadata`) // `http://localhost:3030/seed/${data}/metadata`
       .then((res) => res.json())
       .then((json) => {
         this.setState({ player: json, playerIsLoaded: true });
@@ -46,13 +46,23 @@ class Battle extends Component {
       });
   };
 
+  updateTurn = () => {
+    // Check turn
+    const turn = this.state.playerTurn;
+    if (turn === true) {
+      this.setState({ playerTurn: false, enemyTurn: true });
+    } else {
+      this.setState({ playerTurn: true, enemyTurn: false });
+    }
+  };
+
   handleInitiative = () => {
     let initiative = rollInitiative2(2);
 
     if (initiative[0] >= initiative[1]) {
-      this.setState({ playerTurn: true });
+      this.setState({ playerTurn: true, enemyTurn: false });
     } else {
-      this.setState({ playerTurn: false });
+      this.setState({ playerTurn: false, enemyTurn: true });
     }
 
     const log = [];
@@ -76,17 +86,18 @@ class Battle extends Component {
       log.push(...this.state.log);
       const attackLog = doAttackRound(player, enemy);
       log.push(...attackLog);
+      this.setState({ log: log });
 
-      // Check turn
-      const turn = this.state.playerTurn;
-      if (turn === true) {
-        this.setState({ log: log, playerTurn: false });
+      if (player.hp > 0 && enemy.hp > 0) {
+        this.updateTurn();
       } else {
-        this.setState({ log: log, playerTurn: true });
+        log.push(`${enemy.name} has died in combat.`);
+        this.setState({ battleActive: false });
       }
     } else {
       this.setState({ battleActive: false });
     }
+    this.scrollToBottom();
   };
 
   handleSpecial = (player, enemy) => {
@@ -95,17 +106,18 @@ class Battle extends Component {
       log.push(...this.state.log);
       const attackLog = doSpecialRound(player, enemy);
       log.push(...attackLog);
+      this.setState({ log: log });
 
-      // Check turn
-      const turn = this.state.playerTurn;
-      if (turn === true) {
-        this.setState({ log: log, playerTurn: false });
+      if (player.hp > 0 && enemy.hp > 0) {
+        this.updateTurn();
       } else {
-        this.setState({ log: log, playerTurn: true });
+        log.push(`${enemy.name} has died in combat.`);
+        this.setState({ battleActive: false });
       }
     } else {
       this.setState({ battleActive: false });
     }
+    this.scrollToBottom();
   };
 
   handleHeal = (player, enemy) => {
@@ -114,17 +126,18 @@ class Battle extends Component {
       log.push(...this.state.log);
       const attackLog = doHealRound(player);
       log.push(...attackLog);
+      this.setState({ log: log });
 
-      // Check turn
-      const turn = this.state.playerTurn;
-      if (turn === true) {
-        this.setState({ log: log, playerTurn: false });
+      if (player.hp > 0 && enemy.hp > 0) {
+        this.updateTurn();
       } else {
-        this.setState({ log: log, playerTurn: true });
+        log.push(`${enemy.name} has died in combat.`);
+        this.setState({ battleActive: false });
       }
     } else {
       this.setState({ battleActive: false });
     }
+    this.scrollToBottom();
   };
 
   handleFlee = (player, enemy) => {
@@ -150,6 +163,11 @@ class Battle extends Component {
     } else {
       this.setState({ battleActive: false });
     }
+    this.scrollToBottom();
+  };
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
   render() {
@@ -161,6 +179,7 @@ class Battle extends Component {
       enemyIsLoaded,
       logIsLoaded,
       playerTurn,
+      enemyTurn,
       battleActive,
     } = this.state;
     return (
@@ -190,7 +209,7 @@ class Battle extends Component {
                   facingLeft={false}
                 />
               )}
-              {logIsLoaded && playerTurn === true && battleActive && (
+              {logIsLoaded && playerTurn && battleActive && (
                 <CombatActions
                   player={player}
                   enemy={enemy}
@@ -198,6 +217,7 @@ class Battle extends Component {
                   specialCallback={this.handleSpecial}
                   healCallback={this.handleHeal}
                   fleeCallback={this.handleFlee}
+                  // disabled={playerTurn}
                 />
               )}
             </div>
@@ -205,7 +225,7 @@ class Battle extends Component {
               {enemyIsLoaded && (
                 <BattleEntity key={enemy.seed} data={enemy} facingLeft={true} />
               )}
-              {logIsLoaded && playerTurn === false && battleActive && (
+              {logIsLoaded && enemyTurn && battleActive && (
                 <CombatActions
                   player={enemy}
                   enemy={player}
@@ -213,6 +233,7 @@ class Battle extends Component {
                   specialCallback={this.handleSpecial}
                   healCallback={this.handleHeal}
                   fleeCallback={this.handleFlee}
+                  // disabled={enemyTurn}
                 />
               )}
             </div>
@@ -235,6 +256,12 @@ class Battle extends Component {
               {log.map((l) => (
                 <p>{l}</p>
               ))}
+              <div
+                style={{ float: "left", clear: "both" }}
+                ref={(el) => {
+                  this.messagesEnd = el;
+                }}
+              ></div>
             </BattleLog>
           </Row>
         )}
@@ -266,6 +293,8 @@ const BattleLog = styled.div`
   height: 250px;
   overflow: scroll;
   overflow-x: hidden;
+  // display: flex;
+  // flex-direction: column-reverse;
 `;
 
 const Row = styled.div`

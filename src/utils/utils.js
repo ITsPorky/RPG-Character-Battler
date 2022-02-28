@@ -1,13 +1,13 @@
 // Common methods and functions
 
-const initiateBattle = () => {
+export const initiateBattle = () => {
   let battlelog = [];
   battlelog.push(`Combat has been initiated!`);
 
   return battlelog;
 };
 
-const startBattle = (character, enemy) => {
+export const startBattle = (character, enemy) => {
   let battlelog = [];
   battlelog.push(`${character.name} and ${enemy.name} engage in combat.`);
 
@@ -42,7 +42,7 @@ const startBattle = (character, enemy) => {
   return battlelog;
 };
 
-const takeTurn = (player, enemy) => {
+export const takeTurn = (player, enemy) => {
   let log = [];
   if (player.hp > 0) {
     log = doAttackRound(player, enemy);
@@ -51,7 +51,7 @@ const takeTurn = (player, enemy) => {
   return log;
 };
 
-const doAttackRound = (character, enemy) => {
+export const doAttackRound = (character, enemy) => {
   let log = [];
   log.push(`It is ${character.name}'s turn.`);
   let attacklog1 = attack(character, enemy);
@@ -60,7 +60,7 @@ const doAttackRound = (character, enemy) => {
   return log;
 };
 
-const doSpecialRound = (character, enemy) => {
+export const doSpecialRound = (character, enemy) => {
   let log = [];
   log.push(`It is ${character.name}'s turn.`);
   let attacklog1 = specialAttack(character, enemy);
@@ -69,7 +69,7 @@ const doSpecialRound = (character, enemy) => {
   return log;
 };
 
-const doHealRound = (character) => {
+export const doHealRound = (character) => {
   let log = [];
   log.push(`It is ${character.name}'s turn.`);
   let attacklog1 = heal(character);
@@ -78,7 +78,7 @@ const doHealRound = (character) => {
   return log;
 };
 
-const doFleeRound = (enemy) => {
+export const doFleeRound = (enemy) => {
   let playerHit = rollDice(20);
 
   if (playerHit >= enemy.ac) {
@@ -88,7 +88,7 @@ const doFleeRound = (enemy) => {
   }
 };
 
-const rollDice = (numberOfSides, numberOfRolls = 1) => {
+export const rollDice = (numberOfSides, numberOfRolls = 1) => {
   let total = 0;
   for (let i = 0; i < numberOfRolls; i++) {
     let roll = Math.floor(Math.random() * numberOfSides) + 1;
@@ -97,11 +97,12 @@ const rollDice = (numberOfSides, numberOfRolls = 1) => {
   return total;
 };
 
-const attack = (character, enemy) => {
+export const attack = (character, enemy) => {
   let log = [];
-  let playerHit = rollDice(20);
+  let roll = rollDice(20);
+  let modifiedRoll = addAbilityModifier(character, roll);
   // Crit
-  if (playerHit === 20) {
+  if (roll === 20 && modifiedRoll >= enemy.ac) {
     let damage =
       getRollType(character.weapon.damage) +
       getRollType(character.weapon.damage) +
@@ -110,7 +111,7 @@ const attack = (character, enemy) => {
     log.push(
       `${character.name} lands a critical hit to ${enemy.name} with their ${character.weapon.type} causing ${damage} points of damage!`
     );
-  } else if (playerHit >= enemy.ac) {
+  } else if (modifiedRoll >= enemy.ac) {
     // Normal hit
     let damage =
       getRollType(character.weapon.damage) + character.weapon.modifier;
@@ -127,7 +128,7 @@ const attack = (character, enemy) => {
   return log;
 };
 
-const heal = (character) => {
+export const heal = (character) => {
   let log = [];
   let heal = rollDice(4, 2) + 2;
   character.hp += heal;
@@ -138,11 +139,12 @@ const heal = (character) => {
   return log;
 };
 
-const specialAttack = (character, enemy) => {
+export const specialAttack = (character, enemy) => {
   let log = [];
-  let playerHit = rollDice(20);
+  let roll = rollDice(20);
+  let modifiedRoll = addAbilityModifier(character, roll);
   // Crit
-  if (playerHit === 20) {
+  if (roll === 20 && modifiedRoll >= enemy.ac) {
     let damage =
       getRollType(character.weapon.damage) +
       getRollType(character.weapon.damage) +
@@ -151,7 +153,7 @@ const specialAttack = (character, enemy) => {
     log.push(
       `${character.name} lands a critical hit to ${enemy.name} with their ${character.weapon.type} causing ${damage} points of damage!`
     );
-  } else if (playerHit >= enemy.ac) {
+  } else if (roll >= enemy.ac) {
     // Normal hit
     let damage =
       getRollType(character.weapon.damage) + character.weapon.modifier;
@@ -168,7 +170,7 @@ const specialAttack = (character, enemy) => {
   return log;
 };
 
-const rollInitiative = () => {
+export const rollInitiative = () => {
   let data = [rollDice(20), rollDice(20)];
   if (data[0] >= data[1]) {
     data.push(true);
@@ -179,7 +181,7 @@ const rollInitiative = () => {
   }
 };
 
-const rollInitiative2 = (numberOfEntities) => {
+export const rollInitiative2 = (numberOfEntities) => {
   let data = [];
   for (let i = 0; i < numberOfEntities; i++) {
     data.push(rollDice(20));
@@ -197,7 +199,14 @@ const rollInitiative2 = (numberOfEntities) => {
   }
 };
 
-const getRollType = (value) => {
+export const checkAlive = (character, enemy) => {
+  if (character.hp > 0 && enemy.hp > 0) {
+    return true;
+  }
+  return false;
+};
+
+export const getRollType = (value) => {
   switch (value) {
     case "d3":
       return rollDice(3);
@@ -228,15 +237,56 @@ const getRollType = (value) => {
   }
 };
 
-module.exports = {
-  rollDice,
-  attack,
-  getRollType,
-  doAttackRound,
-  doSpecialRound,
-  doHealRound,
-  doFleeRound,
-  startBattle,
-  initiateBattle,
-  rollInitiative2,
+export const addAbilityModifier = (character, roll) => {
+  switch (character) {
+    case character.class === "Ranger":
+      return getAbilityModifier(character.dex, roll);
+    case character.class === "Rogue":
+      return getAbilityModifier(character.dex, roll);
+    case character.class === "Barbarian":
+      return getAbilityModifier(character.str, roll);
+    case character.class === "Knight":
+      return getAbilityModifier(character.str, roll);
+    case character.class === "Wizard":
+      return getAbilityModifier(character.wis, roll);
+    case character.class === "Cleric":
+      return getAbilityModifier(character.wis, roll);
+  }
+};
+
+export const getAbilityModifier = (modifier, roll) => {
+  switch (modifier) {
+    case "-5":
+      return roll - 5;
+    case "-4":
+      return roll - 4;
+    case "-3":
+      return roll - 3;
+    case "-2":
+      return roll - 2;
+    case "-1":
+      return roll - 1;
+    case "+0":
+      return roll + 0;
+    case "+1":
+      return roll + 1;
+    case "+2":
+      return roll + 2;
+    case "+3":
+      return roll + 3;
+    case "+4":
+      return roll + 4;
+    case "+5":
+      return roll + 5;
+    case "+6":
+      return roll + 6;
+    case "+7":
+      return roll + 7;
+    case "+8":
+      return roll + 8;
+    case "+9":
+      return roll + 9;
+    case "+10":
+      return roll + 10;
+  }
 };

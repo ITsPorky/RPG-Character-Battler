@@ -7,6 +7,7 @@ class CombatActions extends Component {
     names: ["Attack", "Special", "Heal", "Flee"],
     player: this.props.player,
     enemy: this.props.enemy,
+    // disabled: this.props.disabled,
   };
 
   handleAttack = (player, enemy) => {
@@ -26,7 +27,7 @@ class CombatActions extends Component {
   };
 
   render() {
-    const { names, player, enemy } = this.state;
+    const { names, player, enemy, disabled } = this.state;
     return (
       <ActionContainer>
         <table>
@@ -37,6 +38,7 @@ class CombatActions extends Component {
                   key={names[0]}
                   name={names[0]}
                   onClick={() => this.props.attackCallback(player, enemy)}
+                  // disabled={disabled}
                 />
               </td>
               <td>
@@ -44,6 +46,7 @@ class CombatActions extends Component {
                   key={names[1]}
                   name={names[1]}
                   onClick={() => this.props.specialCallback(player, enemy)}
+                  // disabled={disabled}
                 />
               </td>
             </tr>
@@ -53,6 +56,7 @@ class CombatActions extends Component {
                   key={names[2]}
                   name={names[2]}
                   onClick={() => this.props.healCallback(player, enemy)}
+                  // disabled={disabled}
                 />
               </td>
               <td>
@@ -60,6 +64,7 @@ class CombatActions extends Component {
                   key={names[3]}
                   name={names[3]}
                   onClick={() => this.props.fleeCallback(player, enemy)}
+                  // disabled={disabled}
                 />
               </td>
             </tr>

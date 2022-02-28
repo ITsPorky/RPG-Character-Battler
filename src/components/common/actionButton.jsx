@@ -5,11 +5,12 @@ class ActionButton extends Component {
   state = {
     name: this.props.name,
     action: this.props.onClick,
+    // disabled: this.props.disabled,
   };
 
   render() {
-    const { name, action } = this.state;
-    return <Button onClick={action}>{name}</Button>;
+    const { name, action, disabled } = this.state;
+    return <Button /* disabled={disabled} */ onClick={action}>{name}</Button>;
   }
 }
 

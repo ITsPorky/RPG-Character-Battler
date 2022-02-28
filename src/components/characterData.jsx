@@ -3,9 +3,6 @@ import React, { Component } from "react";
 class CharacterData extends Component {
   handleSubmit = (event) => {
     const seed = event.target.seed.value;
-    // this.fetchCharacter(seed);
-    // const data = { ...this.state.data };
-    // console.log(data);
     this.props.onCallback(seed);
     event.preventDefault();
   };
