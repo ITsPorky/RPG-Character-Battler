@@ -1,4 +1,5 @@
 // Common methods and functions
+export const API_ADDRESS = "localhost:3030";
 
 export const initiateBattle = () => {
   let battlelog = [];
@@ -238,19 +239,19 @@ export const getRollType = (value) => {
 };
 
 export const addAbilityModifier = (character, roll) => {
-  switch (character) {
+  switch (true) {
     case character.class === "Ranger":
-      return getAbilityModifier(character.dex, roll);
+      return getAbilityModifier(character.dexModifier, roll);
     case character.class === "Rogue":
-      return getAbilityModifier(character.dex, roll);
+      return getAbilityModifier(character.dexModifier, roll);
     case character.class === "Barbarian":
-      return getAbilityModifier(character.str, roll);
+      return getAbilityModifier(character.strModifier, roll);
     case character.class === "Knight":
-      return getAbilityModifier(character.str, roll);
+      return getAbilityModifier(character.strModifier, roll);
     case character.class === "Wizard":
-      return getAbilityModifier(character.wis, roll);
+      return getAbilityModifier(character.wisModifier, roll);
     case character.class === "Cleric":
-      return getAbilityModifier(character.wis, roll);
+      return getAbilityModifier(character.wisModifier, roll);
   }
 };
 

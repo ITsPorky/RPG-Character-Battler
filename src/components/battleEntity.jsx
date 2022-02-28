@@ -41,6 +41,7 @@ const EntitySprite = styled.img`
   animation-iteration-count: infinite;
   // background: radial-gradient(#000, transparent) 75%;
   background: radial-gradient(ellipse, #000, transparent 40%);
+  image-rendering: pixelated;
 `;
 
 const EntityBox = styled.div`

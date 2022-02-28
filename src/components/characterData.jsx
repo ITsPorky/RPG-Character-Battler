@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { API_ADDRESS } from "../utils/utils";
 
 class CharacterData extends Component {
   handleSubmit = (event) => {
@@ -8,7 +9,7 @@ class CharacterData extends Component {
   };
 
   fetchCharacter = async (seed) => {
-    fetch(`http://localhost:3030/seed/${seed}/metadata`)
+    fetch(`http://${API_ADDRESS}/seed/${seed}/metadata`)
       .then((res) => res.json())
       .then((json) => {
         console.log(json);

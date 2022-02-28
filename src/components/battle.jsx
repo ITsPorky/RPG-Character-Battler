@@ -7,6 +7,7 @@ import {
   doFleeRound,
   rollInitiative2,
   initiateBattle,
+  API_ADDRESS,
 } from "../utils/utils";
 import BattleEntity from "./battleEntity";
 import CharacterData from "./characterData";
@@ -30,7 +31,7 @@ class Battle extends Component {
 
   handleCallbackCharacter = (data) => {
     this.setState({ playerSeed: data });
-    fetch(`http://localhost:3030/special/${data}/metadata`) // `http://localhost:3030/seed/${data}/metadata`
+    fetch(`http://${API_ADDRESS}/special/${data}/metadata`) // `http://localhost:3030/seed/${data}/metadata`
       .then((res) => res.json())
       .then((json) => {
         this.setState({ player: json, playerIsLoaded: true });
@@ -39,7 +40,7 @@ class Battle extends Component {
 
   handleCallbackEnemy = (data) => {
     this.setState({ enemySeed: data });
-    fetch(`http://localhost:3030/seed/${data}/metadata`)
+    fetch(`http://${API_ADDRESS}/seed/${data}/metadata`)
       .then((res) => res.json())
       .then((json) => {
         this.setState({ enemy: json, enemyIsLoaded: true });
@@ -97,7 +98,7 @@ class Battle extends Component {
     } else {
       this.setState({ battleActive: false });
     }
-    this.scrollToBottom();
+    // this.scrollToBottom();
   };
 
   handleSpecial = (player, enemy) => {
@@ -117,7 +118,7 @@ class Battle extends Component {
     } else {
       this.setState({ battleActive: false });
     }
-    this.scrollToBottom();
+    // this.scrollToBottom();
   };
 
   handleHeal = (player, enemy) => {
@@ -137,7 +138,7 @@ class Battle extends Component {
     } else {
       this.setState({ battleActive: false });
     }
-    this.scrollToBottom();
+    // this.scrollToBottom();
   };
 
   handleFlee = (player, enemy) => {
@@ -163,7 +164,7 @@ class Battle extends Component {
     } else {
       this.setState({ battleActive: false });
     }
-    this.scrollToBottom();
+    // this.scrollToBottom();
   };
 
   scrollToBottom = () => {
