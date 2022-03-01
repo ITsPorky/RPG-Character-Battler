@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/RPG-Character-Battler/static/css/main.60d8bec2.css",
-    "main.js": "/RPG-Character-Battler/static/js/main.8650ac58.js",
+    "main.js": "/RPG-Character-Battler/static/js/main.31493249.js",
     "static/js/787.103519b5.chunk.js": "/RPG-Character-Battler/static/js/787.103519b5.chunk.js",
     "static/media/bg_all.png": "/RPG-Character-Battler/static/media/bg_all.97c26222c6a260530657.png",
     "index.html": "/RPG-Character-Battler/index.html",
     "main.60d8bec2.css.map": "/RPG-Character-Battler/static/css/main.60d8bec2.css.map",
-    "main.8650ac58.js.map": "/RPG-Character-Battler/static/js/main.8650ac58.js.map",
+    "main.31493249.js.map": "/RPG-Character-Battler/static/js/main.31493249.js.map",
     "787.103519b5.chunk.js.map": "/RPG-Character-Battler/static/js/787.103519b5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.60d8bec2.css",
-    "static/js/main.8650ac58.js"
+    "static/js/main.31493249.js"
   ]
 }
