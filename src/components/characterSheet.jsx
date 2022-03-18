@@ -7,6 +7,7 @@ import StatsTable from "./statsTable";
 import Weapon from "./weapon";
 import InfoTable from "./infoTable";
 import HealthAndArmor from "./HealthAndArmor";
+import { API_ADDRESS } from "../utils/utils";
 
 class CharacterSheet extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class CharacterSheet extends Component {
   }
 
   handleCallback = (data) => {
-    fetch(`http://localhost:3030/seed/${data}/metadata`)
+    fetch(`${API_ADDRESS}/seed/${data}/metadata`)
       .then((res) => res.json())
       .then((json) => {
         this.setState({ data: json, weapon: json.weapon, isLoaded: true });
@@ -53,26 +54,12 @@ class CharacterSheet extends Component {
                 {HealthAndArmor(data)}
                 {StatsTable(data)}
               </FlexItem>
-              <CharacterSprite src={data.image_url} alt="Character Card" />
+              <CharacterCard src={data.image_url} alt="Character Card" />
               <Weapon key={data.seed} data={data} weapon={weapon} />
             </FlexContainer>
           </React.Fragment>
         )}
       </Character>
-
-      // <React.Fragment>
-      //   <h1 Style="text-align: center;">Character Sheet</h1>
-      //   <div Style="text-align: center;">
-      //     <CharacterData onCallback={this.handleCallback} />
-      //   </div>
-      //   {isLoaded && (
-      //     <Layout>
-      //       <Column>
-      //         <Character key={data.seed} data={data} weapon={weapon} />
-      //       </Column>
-      //     </Layout>
-      //   )}
-      // </React.Fragment>
     );
   }
 }
@@ -84,6 +71,11 @@ const Character = styled.section`
 const CharacterSprite = styled.img`
   background: radial-gradient(#666, #222);
   // background: radial-gradient(#888, #fff);
+  border: 3px solid #fff;
+  margin: 0.25em;
+  image-rendering: pixelated;
+`;
+const CharacterCard = styled.img`
   border: 3px solid #fff;
   margin: 0.25em;
 `;

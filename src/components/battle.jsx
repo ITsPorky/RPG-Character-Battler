@@ -31,7 +31,7 @@ class Battle extends Component {
 
   handleCallbackCharacter = (data) => {
     this.setState({ playerSeed: data });
-    fetch(`http://${API_ADDRESS}/special/${data}/metadata`) // `http://localhost:3030/seed/${data}/metadata`
+    fetch(`${API_ADDRESS}/seed/${data}/metadata`) // `http://localhost:3030/seed/${data}/metadata`
       .then((res) => res.json())
       .then((json) => {
         this.setState({ player: json, playerIsLoaded: true });
@@ -40,7 +40,7 @@ class Battle extends Component {
 
   handleCallbackEnemy = (data) => {
     this.setState({ enemySeed: data });
-    fetch(`http://${API_ADDRESS}/seed/${data}/metadata`)
+    fetch(`${API_ADDRESS}/seed/${data}/metadata`)
       .then((res) => res.json())
       .then((json) => {
         this.setState({ enemy: json, enemyIsLoaded: true });

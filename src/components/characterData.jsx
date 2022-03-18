@@ -9,7 +9,7 @@ class CharacterData extends Component {
   };
 
   fetchCharacter = async (seed) => {
-    fetch(`http://${API_ADDRESS}/seed/${seed}/metadata`)
+    fetch(`${API_ADDRESS}/seed/${seed}/metadata`)
       .then((res) => res.json())
       .then((json) => {
         console.log(json);
