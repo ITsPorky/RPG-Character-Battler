@@ -67,6 +67,7 @@ const WeaponSprite = styled.img`
   // background: radial-gradient(#888, #fff);
   border: 3px solid #fff;
   margin-right: 0.5em;
+  image-rendering: pixelated;
 `;
 
 const WeaponInfo = styled.div`

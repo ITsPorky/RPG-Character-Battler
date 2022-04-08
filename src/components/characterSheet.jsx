@@ -78,6 +78,7 @@ const CharacterSprite = styled.img`
 const CharacterCard = styled.img`
   border: 3px solid #fff;
   margin: 0.25em;
+  image-rendering: pixelated;
 `;
 
 const CharacterWindow = styled.div`
