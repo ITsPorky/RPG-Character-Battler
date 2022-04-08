@@ -1,5 +1,5 @@
 // Common methods and functions
-export const API_ADDRESS = "http://14.202.107.208:3030";
+export const API_ADDRESS = "https://character-generation-api.herokuapp.com";
 
 export const initiateBattle = () => {
   let battlelog = [];
